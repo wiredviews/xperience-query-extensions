@@ -2,7 +2,7 @@
 
 [![NuGet Package](https://img.shields.io/nuget/v/WiredViews.Xperience.QueryExtensions.svg)](https://www.nuget.org/packages/WiredViews.Xperience.QueryExtensions)
 
-This package provides a set of extension methods for Kentico Xperience 13.0 `DocumentQuery`, `MultiDocumentQuery`, and `ObjectQuery` [data access APIs](https://docs.xperience.io/13api/content-management/pages).
+This package provides a set of extension methods for Kentico Xperience 13.0 `DocumentQuery`, `MultiDocumentQuery`, `ObjectQuery`, and `IPageRetriever` [data access APIs](https://docs.xperience.io/13api/content-management/pages).
 
 ## Dependencies
 
@@ -13,7 +13,7 @@ This package is compatible with ASP.NET Core 3.1 -> ASP.NET Core 5 applications 
 1. Install the NuGet package in your ASP.NET Core project (or class library)
 
    ```bash
-   dotnet add package WiredViews.Xperience.QueryExtensions
+   dotnet add package XperienceCommunity.QueryExtensions
    ```
 
 1. The extension methods are all in the `CMS.DocumentEngine` and `CMS.DataEngine` namespaces, so assuming you have the package installed you should see them appear in Intellisense.
@@ -42,7 +42,7 @@ var query = DocumentHelper.GetDocuments()
     .DebugQuery();
 
 /*
-~~~ BEGIN [path\to\your\app\Program.cs] QUERY ~~~
+--- BEGIN [path\to\your\app\Program.cs] QUERY ---
 
 
 DECLARE @DocumentCulture nvarchar(max) = N'en-US';
@@ -53,7 +53,7 @@ WHERE [DocumentCulture] = @DocumentCulture
 ORDER BY NodeID DESC
 
 
-~~~ END [path\to\your\app\Program.cs] QUERY ~~~
+--- END [path\to\your\app\Program.cs] QUERY ---
 */
 ```
 
@@ -64,7 +64,7 @@ var query = DocumentHelper.GetDocuments()
     .DebugQuery("Newest Document");
 
 /*
-~~~ BEGIN [Newest Document] QUERY ~~~
+--- BEGIN [Newest Document] QUERY ---
 
 
 DECLARE @DocumentCulture nvarchar(max) = N'en-US';
@@ -75,7 +75,7 @@ WHERE [DocumentCulture] = @DocumentCulture
 ORDER BY NodeID DESC
 
 
-~~~ END [Newest Document] QUERY ~~~
+--- END [Newest Document] QUERY ---
 */
 ```
 
@@ -124,7 +124,7 @@ var query = UserInfo.Provider.Get()
     .DebugQuery();
 
 /*
-~~~ BEGIN [path\to\your\app\Program.cs] QUERY ~~~
+--- BEGIN [path\to\your\app\Program.cs] QUERY ---
 
 
 SELECT TOP 1 *
@@ -132,7 +132,7 @@ FROM CMS_User
 ORDER BY UserLastModified DESC
 
 
-~~~ END [path\to\your\app\Program.cs] QUERY ~~~
+--- END [path\to\your\app\Program.cs] QUERY ---
 */
 ```
 
@@ -143,7 +143,7 @@ var query = UserInfo.Provider.Get()
     .DebugQuery("User");
 
 /*
-~~~ QUERY [User] START ~~~
+--- QUERY [User] START ---
 
 
 SELECT TOP 1 *
@@ -151,7 +151,7 @@ FROM CMS_User
 ORDER BY UserLastModified DESC
 
 
-~~~ QUERY [User] END ~~~
+--- QUERY [User] END ---
 */
 ```
 
@@ -190,6 +190,34 @@ public async Task QueryDatabase(CancellationToken token)
 
     // ...
 }
+```
+
+### PageRetriever
+
+```csharp
+int pageIndex = 3;
+int pageSize = 10;
+
+var result = await retriever.RetrievePagedAsync<TreeNode>(
+    pageIndex,
+    pageSize,
+    q => q.OrderByNodeOrder(),
+    cancellationToken: token);
+
+int total = result.TotalRecords;
+List<TreeNode> pages = result.Items;
+```
+
+```csharp
+TreeNode? page = await retriever.FirstOrDefaultAsync<TreeNode>(
+    q => q.TopN(1),
+    cancellationToken: token);
+```
+
+```csharp
+IEnumerable<Guid> nodeGuids = await retriever.SelectAsync<LandingPage>(
+    landingPage => landingPage.NodeGUID,
+    cancellationToken: token);
 ```
 
 ## References

@@ -39,8 +39,8 @@ namespace CMS.DataEngine
         }
 
         /// <summary>
-        /// Returns the first item of the <paramref name="query"/> as the generic Object type and <see cref="null" /> if no items were returned.
-        /// </summary>
+        /// Returns the first item of the <paramref name="query"/> as the generic Object type and null if no items were returned.
+        /// /// </summary>
         /// <param name="query">The current ObjectQuery</param>
         /// <param name="token">Optional cancellation token</param>
         /// <returns></returns>
@@ -53,7 +53,7 @@ namespace CMS.DataEngine
         }
 
         /// <summary>
-        /// Returns the first item of the <paramref name="query"/> as a <see cref="BaseInfo" /> and <see cref="null" /> if no items were returned.
+        /// Returns the first item of the <paramref name="query"/> as a <see cref="BaseInfo" /> and null if no items were returned.
         /// </summary>
         /// <param name="query">The current ObjectQuery</param>
         /// <param name="token">Optional cancellation token</param>
@@ -70,14 +70,14 @@ namespace CMS.DataEngine
         /// </summary>
         /// <param name="query">The current ObjectQuery</param>
         /// <param name="queryName">Optional Name for the query that will denote in the output where this specific query starts and ends.
-        /// If no value is supplied, the filename containing the calling method will be used. If null or an empty string is supplied, name of the generic <see cref="{TObject}" /> will be used.
+        /// If no value is supplied, the filename containing the calling method will be used. If null or an empty string is supplied, name of the generic will be used.
         /// </param>
         /// <example>
         /// UserInfo.Provider.Get()
         ///     .WhereEquals("Email", "admin@localhost.local")
         ///     .Print("User");
         /// 
-        /// ~~~ BEGIN [User] QUERY ~~~
+        /// --- BEGIN [User] QUERY ---
         ///
         /// DECLARE @Email nvarchar(max) = N'admin@localhost.local';
         ///
@@ -85,7 +85,7 @@ namespace CMS.DataEngine
         /// FROM CMS_User
         /// WHERE [Email] = @Email
         ///
-        /// ~~~ END [User] QUERY ~~~
+        /// --- END [User] QUERY ---
         /// </example>
         /// <returns></returns>
         public static ObjectQuery<TObject> DebugQuery<TObject>(this ObjectQuery<TObject> query, [CallerFilePath] string queryName = "")
@@ -96,7 +96,7 @@ namespace CMS.DataEngine
                 : queryName;
 
             Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine($"~~~ BEGIN [{queryName}] QUERY ~~~");
+            Debug.WriteLine($"--- BEGIN [{queryName}] QUERY ---");
             Debug.WriteLine(Environment.NewLine);
 
             Debug.WriteLine(Environment.NewLine);
@@ -104,7 +104,7 @@ namespace CMS.DataEngine
             Debug.WriteLine(Environment.NewLine);
 
             Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine($"~~~ END [{queryName}] QUERY ~~~");
+            Debug.WriteLine($"--- END [{queryName}] QUERY ---");
             Debug.WriteLine(Environment.NewLine);
 
             return query;
@@ -125,7 +125,7 @@ namespace CMS.DataEngine
                 : queryName;
 
             Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine($"~~~ BEGIN [{queryName}] QUERY ~~~");
+            Debug.WriteLine($"--- BEGIN [{queryName}] QUERY ---");
             Debug.WriteLine(Environment.NewLine);
 
             Debug.WriteLine(Environment.NewLine);
@@ -133,7 +133,7 @@ namespace CMS.DataEngine
             Debug.WriteLine(Environment.NewLine);
 
             Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine($"~~~ END [{queryName}] QUERY ~~~");
+            Debug.WriteLine($"--- END [{queryName}] QUERY ---");
             Debug.WriteLine(Environment.NewLine);
 
             return query;
@@ -145,7 +145,7 @@ namespace CMS.DataEngine
         /// <param name="query">The current ObjectQuery</param>
         /// <param name="logger">The logger used to output the query</param>
         /// <param name="queryName">Optional Name for the query that will denote in the output where this specific query starts and ends.
-        /// If no value is supplied, the filename containing the calling method will be used. If null or an empty string is supplied, name of the generic <see cref="{TObject}" /> will be used.
+        /// If no value is supplied, the filename containing the calling method will be used. If null or an empty string is supplied, name of the generic will be used.
         /// </param>
         /// <returns></returns>
         public static ObjectQuery<TObject> LogQuery<TObject>(this ObjectQuery<TObject> query, ILogger logger, [CallerFilePath] string queryName = "")
