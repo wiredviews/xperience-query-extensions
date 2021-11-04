@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xperience.QueryExtensions", "src\Xperience.QueryExtensions\Xperience.QueryExtensions.csproj", "{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XperienceCommunity.QueryExtensions", "src\XperienceCommunity.QueryExtensions\XperienceCommunity.QueryExtensions.csproj", "{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

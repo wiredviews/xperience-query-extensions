@@ -16,7 +16,7 @@ This package is compatible with ASP.NET Core 3.1 -> ASP.NET Core 5 applications 
    dotnet add package XperienceCommunity.QueryExtensions
    ```
 
-1. The extension methods are all in the `CMS.DocumentEngine` and `CMS.DataEngine` namespaces, so assuming you have the package installed you should see them appear in Intellisense.
+1. The extension methods are all in the `Kentico.Content.Web.Mvc`, `CMS.DocumentEngine` and `CMS.DataEngine` namespaces, so assuming you have the package installed you should see them appear in Intellisense.
 
 ## Extension Method Examples
 
