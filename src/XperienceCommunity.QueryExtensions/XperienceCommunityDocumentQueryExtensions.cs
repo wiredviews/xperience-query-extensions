@@ -37,6 +37,25 @@ namespace CMS.DocumentEngine
         /// <param name="queryName">Optional Name for the query that will denote in the output where this specific query starts and ends.
         /// If no value is supplied, the filename containing the calling method will be used. If null or an empty string is supplied, name of the generic will be used.
         /// </param>
+        /// <example>
+        /// DocumentHelper
+        ///     .GetDocuments&lt;TreeNode&gt;()
+        ///     .TopN(1)
+        ///     .DebugQuery("First Document");
+        /// 
+        /// 
+        /// --- BEGIN [First Document] QUERY ---
+        /// 
+        /// 
+        /// DECLARE @DocumentCulture nvarchar(max) = N'en-US';
+        ///
+        /// SELECT TOP 1 *
+        /// FROM View_CMS_Tree_Joined AS V WITH (NOLOCK, NOEXPAND) LEFT OUTER JOIN COM_SKU AS S WITH (NOLOCK) ON [V].[NodeSKUID] = [S].[SKUID]
+        /// WHERE [DocumentCulture] = @DocumentCulture
+        ///
+        /// 
+        /// --- END [First Document] QUERY ---
+        /// </example>
         /// <returns></returns>
         public static DocumentQuery<TNode> DebugQuery<TNode>(this DocumentQuery<TNode> query, [CallerFilePath] string queryName = "")
             where TNode : TreeNode, new()

@@ -43,7 +43,7 @@ namespace Xperience.QueryExtensions
         ///     .DebugQuery("First Document");
         /// 
         /// 
-        /// --- QUERY [First Document] START ---
+        /// --- BEGIN [First Document] QUERY ---
         /// 
         /// 
         /// DECLARE @DocumentCulture nvarchar(max) = N'en-US';
@@ -53,8 +53,7 @@ namespace Xperience.QueryExtensions
         /// WHERE [DocumentCulture] = @DocumentCulture
         ///
         /// 
-        /// --- QUERY [Dirst Document] END ---
-        ///
+        /// --- END [First Document] QUERY ---
         /// </example>
         /// <returns></returns>
         public static MultiDocumentQuery DebugQuery(this MultiDocumentQuery query, [CallerFilePath] string queryName = "")
