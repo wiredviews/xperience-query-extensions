@@ -5,10 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using CMS.DocumentEngine;
 using Microsoft.Extensions.Logging;
 
-namespace Xperience.QueryExtensions
+namespace CMS.DocumentEngine
 {
     public static class XperienceCommunityMultiDocumentQueryExtensions
     {
