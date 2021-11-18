@@ -31,7 +31,7 @@ namespace CMS.DocumentEngine
             query.OrderBy(nameof(TreeNode.NodeOrder));
 
         /// <summary>
-        /// Prints the provided query's full materialized query text using <see cref="Debug.WriteLine(object?)"/>
+        /// Prints the provided query's full materialized query text using <see cref="Console.WriteLine(string)"/>
         /// </summary>
         /// <param name="query">The current DocumentQuery</param>
         /// <param name="queryName">Optional Name for the query that will denote in the output where this specific query starts and ends.
@@ -64,17 +64,32 @@ namespace CMS.DocumentEngine
                 ? typeof(TNode).Name
                 : queryName;
 
-            Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine($"--- BEGIN [{queryName}] QUERY ---");
-            Debug.WriteLine(Environment.NewLine);
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine($"--- BEGIN [{queryName}] QUERY ---");
+            Console.WriteLine(Environment.NewLine);
 
-            Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine(query.GetFullQueryText());
-            Debug.WriteLine(Environment.NewLine);
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine(query.GetFullQueryText());
+            Console.WriteLine(Environment.NewLine);
 
-            Debug.WriteLine(Environment.NewLine);
-            Debug.WriteLine($"--- END [{queryName}] QUERY ---");
-            Debug.WriteLine(Environment.NewLine);
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine($"--- END [{queryName}] QUERY ---");
+            Console.WriteLine(Environment.NewLine);
+
+            return query;
+        }
+
+        /// <summary>
+        /// Allow the caller to specify an action that has access to the full query text at the point
+        /// at which this method is called
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static DocumentQuery<TNode> TapQuery<TNode>(this DocumentQuery<TNode> query, Action<string> action)
+            where TNode : TreeNode, new()
+        {
+            action(query.GetFullQueryText());
 
             return query;
         }
