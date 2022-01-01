@@ -6,6 +6,34 @@ namespace XperienceCommunity.QueryExtensions.Objects
     public static class XperienceCommunityObjectQueryExtensions
     {
         /// <summary>
+        /// Allows the caller to specify an action that has access to the query.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="action"></param>
+        /// <typeparam name="TInfo"></typeparam>
+        /// <returns></returns>
+        public static ObjectQuery<TInfo> Tap<TInfo>(this ObjectQuery<TInfo> query, Action<ObjectQuery<TInfo>> action)
+            where TInfo : BaseInfo, new()
+        {
+            action(query);
+
+            return query;
+        }
+
+        /// <summary>
+        /// Allows the caller to specify an action that has access to the query.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static ObjectQuery Tap(this ObjectQuery query, Action<ObjectQuery> action)
+        {
+            action(query);
+
+            return query;
+        }
+
+        /// <summary>
         /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="condition" /> is true, otherwise executes
         /// the <paramref name="elseAction" /> if it is provided.
         /// </summary>
@@ -18,7 +46,7 @@ namespace XperienceCommunity.QueryExtensions.Objects
         public static ObjectQuery<TInfo> If<TInfo>(
             this ObjectQuery<TInfo> query, bool condition,
             Action<ObjectQuery<TInfo>> ifTrueAction,
-            Action<ObjectQuery<TInfo>>? elseAction)
+            Action<ObjectQuery<TInfo>>? elseAction = null)
             where TInfo : BaseInfo, new()
         {
             if (condition)
@@ -45,7 +73,7 @@ namespace XperienceCommunity.QueryExtensions.Objects
         public static ObjectQuery If(
             this ObjectQuery query, bool condition,
             Action<ObjectQuery> ifTrueAction,
-            Action<ObjectQuery>? elseAction)
+            Action<ObjectQuery>? elseAction = null)
         {
             if (condition)
             {
@@ -72,7 +100,7 @@ namespace XperienceCommunity.QueryExtensions.Objects
         public static ObjectQuery<TInfo> If<TInfo>(
             this ObjectQuery<TInfo> query, Func<ObjectQuery<TInfo>, bool> predicate,
             Action<ObjectQuery<TInfo>> ifTrueAction,
-            Action<ObjectQuery<TInfo>>? elseAction)
+            Action<ObjectQuery<TInfo>>? elseAction = null)
             where TInfo : BaseInfo, new()
         {
             if (predicate(query))
@@ -99,7 +127,7 @@ namespace XperienceCommunity.QueryExtensions.Objects
         public static ObjectQuery If(
             this ObjectQuery query, Func<ObjectQuery, bool> predicate,
             Action<ObjectQuery> ifTrueAction,
-            Action<ObjectQuery>? elseAction)
+            Action<ObjectQuery>? elseAction = null)
         {
             if (predicate(query))
             {
@@ -109,34 +137,6 @@ namespace XperienceCommunity.QueryExtensions.Objects
             {
                 elseAction(query);
             }
-
-            return query;
-        }
-
-        /// <summary>
-        /// Allows the caller to specify an action that has access to the query.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="action"></param>
-        /// <typeparam name="TInfo"></typeparam>
-        /// <returns></returns>
-        public static ObjectQuery<TInfo> Tap<TInfo>(this ObjectQuery<TInfo> query, Action<ObjectQuery<TInfo>> action)
-            where TInfo : BaseInfo, new()
-        {
-            action(query);
-
-            return query;
-        }
-
-        /// <summary>
-        /// Allows the caller to specify an action that has access to the query.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static ObjectQuery Tap(this ObjectQuery query, Action<ObjectQuery> action)
-        {
-            action(query);
 
             return query;
         }

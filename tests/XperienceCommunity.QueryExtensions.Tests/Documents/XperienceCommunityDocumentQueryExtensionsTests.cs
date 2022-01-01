@@ -2,7 +2,6 @@
 using System.Linq;
 using AutoFixture;
 using CMS.DocumentEngine;
-using CMS.Tests;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -10,7 +9,7 @@ using XperienceCommunity.QueryExtensions.Documents;
 
 namespace XperienceCommunity.QueryExtensions.Tests.Documents
 {
-    public class XperienceCommunityDocumentQueryExtensionsTests : UnitTests
+    public class XperienceCommunityDocumentQueryExtensionsTests
     {
         [Test]
         public void DocumentQuery_WhereNodeGUIDEquals_Will_Add_A_New_Where_Condition()
