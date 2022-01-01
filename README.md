@@ -31,6 +31,22 @@ public void QueryDocument(Guid nodeGuid)
 ```
 
 ```csharp
+public void QueryDocument(int nodeID)
+{
+    var query = DocumentHelper.GetDocuments()
+        .WhereNodeIDEquals(nodeID);
+}
+```
+
+```csharp
+public void QueryDocument(int documentID)
+{
+    var query = DocumentHelper.GetDocuments()
+        .WhereDocumentIDEquals(documentID);
+}
+```
+
+```csharp
 var query = DocumentHelper.GetDocuments()
     .OrderByNodeOrder();
 ```
@@ -77,6 +93,17 @@ ORDER BY NodeID DESC
 
 --- END [Newest Document] QUERY ---
 */
+```
+
+```csharp
+var query = DocumentHelper.GetDocuments()
+    .OrderByDescending(nameof(TreeNode.NodeID))
+    .TopN(1)
+    .TapQuery(fullQueryText => 
+    {
+        Debug.WriteLine(fullQueryText);
+    })
+    .WhereEquals(...)
 ```
 
 ```csharp
@@ -215,9 +242,17 @@ TreeNode? page = await retriever.FirstOrDefaultAsync<TreeNode>(
 ```
 
 ```csharp
-IEnumerable<Guid> nodeGuids = await retriever.SelectAsync<LandingPage>(
-    landingPage => landingPage.NodeGUID,
-    cancellationToken: token);
+IEnumerable<Guid> nodeGuids = await retriever
+    .SelectAsync<LandingPage>(
+        landingPage => landingPage.NodeGUID,
+        cancellationToken: token);
+```
+
+### Collections
+
+
+```csharp
+
 ```
 
 ## References

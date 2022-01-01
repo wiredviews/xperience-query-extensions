@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using CMS.DocumentEngine;
 using Microsoft.Extensions.Logging;
 
-namespace CMS.DocumentEngine
+namespace XperienceCommunity.QueryExtensions.Documents
 {
     public static class XperienceCommunityMultiDocumentQueryExtensions
     {
@@ -19,6 +19,25 @@ namespace CMS.DocumentEngine
         /// <returns></returns>
         public static MultiDocumentQuery WhereNodeGUIDEquals(this MultiDocumentQuery query, Guid nodeGuid) =>
             query.WhereEquals(nameof(TreeNode.NodeGUID), nodeGuid);
+
+        /// <summary>
+        /// Returns the <see cref="MultiDocumentQuery"/> filtered to a single Node with a <see cref="TreeNode.NodeID"/> matching the provided value
+        /// </summary>
+        /// <param name="query">The current MultiDocumentQuery</param>
+        /// <param name="nodeID">Value of the <see cref="TreeNode.NodeID" /> to filter by</param>
+        /// <returns></returns>
+        public static MultiDocumentQuery WhereNodeIDEquals(this MultiDocumentQuery query, int nodeID) =>
+            query.WhereEquals(nameof(TreeNode.NodeID), nodeID);
+
+        /// <summary>
+        /// Returns the <see cref="MultiDocumentQuery"/> filtered to a single Node with a <see cref="TreeNode.DocumentID"/> matching the provided value
+        /// </summary>
+        /// <typeparam name="TNode"></typeparam>
+        /// <param name="query">The current MultiDocumentQuery</param>
+        /// <param name="documentID">Value of the <see cref="TreeNode.DocumentID" /> to filter by</param>
+        /// <returns></returns>
+        public static MultiDocumentQuery WhereDocumentIDEquals<TNode>(this MultiDocumentQuery query, int documentID) where TNode : TreeNode, new() =>
+            query.WhereEquals(nameof(TreeNode.DocumentID), documentID);    
 
         /// <summary>
         /// Returns the <see cref="MultiDocumentQuery"/> ordered by <see cref="TreeNode.NodeOrder"/>

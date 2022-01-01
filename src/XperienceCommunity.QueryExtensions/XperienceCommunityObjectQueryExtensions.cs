@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using CMS.DataEngine;
 using Microsoft.Extensions.Logging;
-using Microsoft.SqlServer.Dac.Model;
 
-namespace CMS.DataEngine
+namespace XperienceCommunity.QueryExtensions.Objects
 {
     public static class XperienceCommunityObjectQueryExtensions
     {
@@ -112,14 +111,29 @@ namespace CMS.DataEngine
         }
 
         /// <summary>
+        /// Allows the caller to specify an action that has access to the query.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="action"></param>
+        /// <typeparam name="TInfo"></typeparam>
+        /// <returns></returns>
+        public static ObjectQuery<TInfo> Tap<TInfo>(this ObjectQuery<TInfo> query, Action<ObjectQuery<TInfo>> action)
+            where TInfo : BaseInfo, new()
+        {
+            action(query);
+
+            return query;
+        }
+
+        /// <summary>
         /// Allow the caller to specify an action that has access to the full query text at the point
         /// at which this method is called
         /// </summary>
         /// <param name="query"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static ObjectQuery<TObject> TapQuery<TObject>(this ObjectQuery<TObject> query, Action<string> action)
-            where TObject : BaseInfo, new()
+        public static ObjectQuery<TInfo> TapQueryText<TInfo>(this ObjectQuery<TInfo> query, Action<string> action)
+            where TInfo : BaseInfo, new()
         {
             action(query.GetFullQueryText());
 
@@ -156,13 +170,26 @@ namespace CMS.DataEngine
         }
 
         /// <summary>
+        /// Allows the caller to specify an action that has access to the query.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static ObjectQuery Tap(this ObjectQuery query, Action<ObjectQuery> action)
+        {
+            action(query);
+
+            return query;
+        }
+
+        /// <summary>
         /// Allow the caller to specify an action that has access to the full query text at the point
         /// at which this method is called
         /// </summary>
         /// <param name="query"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static ObjectQuery TapQuery(this ObjectQuery query, Action<string> action)
+        public static ObjectQuery TapQueryText(this ObjectQuery query, Action<string> action)
         {
             action(query.GetFullQueryText());
 
