@@ -14,8 +14,24 @@ namespace XperienceCommunity.QueryExtensions.Collections
         /// <param name="action"></param>
         /// <typeparam name="TSource"></typeparam>
         /// <returns></returns>
+        public static IEnumerable<TSource> Tap<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
+        {
+            foreach (var item in source)
+            {
+                action(item);
+            }
+
+            return source;
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="action" /> for each item in the sequence
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="action"></param>
+        /// <typeparam name="TSource"></typeparam>
+        /// <returns></returns>
         public static async Task<IEnumerable<TSource>> TapAsync<TSource>(this Task<IEnumerable<TSource>> source, Action<TSource> action)
-            where TSource : class
         {
             var results = await source;
 

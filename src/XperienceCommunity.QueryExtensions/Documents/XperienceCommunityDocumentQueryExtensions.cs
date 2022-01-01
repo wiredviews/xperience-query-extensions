@@ -60,11 +60,10 @@ namespace XperienceCommunity.QueryExtensions.Documents
         /// <summary>
         /// Returns the <see cref="MultiDocumentQuery"/> filtered to a single Node with a <see cref="TreeNode.DocumentID"/> matching the provided value
         /// </summary>
-        /// <typeparam name="TNode"></typeparam>
         /// <param name="query">The current MultiDocumentQuery</param>
         /// <param name="documentID">Value of the <see cref="TreeNode.DocumentID" /> to filter by</param>
         /// <returns></returns>
-        public static MultiDocumentQuery WhereDocumentIDEquals<TNode>(this MultiDocumentQuery query, int documentID) where TNode : TreeNode, new() =>
+        public static MultiDocumentQuery WhereDocumentIDEquals(this MultiDocumentQuery query, int documentID) =>
             query.WhereEquals(nameof(TreeNode.DocumentID), documentID);
 
         /// <summary>
@@ -105,9 +104,9 @@ namespace XperienceCommunity.QueryExtensions.Documents
         /// <param name="query"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static MultiDocumentQuery Tap(this MultiDocumentQuery query, Action<string> action)
+        public static MultiDocumentQuery Tap(this MultiDocumentQuery query, Action<MultiDocumentQuery> action)
         {
-            action(query.GetFullQueryText());
+            action(query);
 
             return query;
         }
@@ -125,7 +124,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         public static DocumentQuery<TNode> If<TNode>(
             this DocumentQuery<TNode> query, bool condition,
             Action<DocumentQuery<TNode>> ifTrueAction,
-            Action<DocumentQuery<TNode>>? elseAction)
+            Action<DocumentQuery<TNode>>? elseAction = null)
             where TNode : TreeNode, new()
         {
             if (condition)
@@ -152,7 +151,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         public static MultiDocumentQuery If(
             this MultiDocumentQuery query, bool condition,
             Action<MultiDocumentQuery> ifTrueAction,
-            Action<MultiDocumentQuery>? elseAction)
+            Action<MultiDocumentQuery>? elseAction = null)
         {
             if (condition)
             {
@@ -179,7 +178,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         public static DocumentQuery<TNode> If<TNode>(
             this DocumentQuery<TNode> query, Func<DocumentQuery<TNode>, bool> predicate,
             Action<DocumentQuery<TNode>> ifTrueAction,
-            Action<DocumentQuery<TNode>>? elseAction)
+            Action<DocumentQuery<TNode>>? elseAction = null)
             where TNode : TreeNode, new()
         {
             if (predicate(query))
@@ -206,7 +205,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         public static MultiDocumentQuery If(
             this MultiDocumentQuery query, Func<MultiDocumentQuery, bool> predicate,
             Action<MultiDocumentQuery> ifTrueAction,
-            Action<MultiDocumentQuery>? elseAction)
+            Action<MultiDocumentQuery>? elseAction = null)
         {
             if (predicate(query))
             {

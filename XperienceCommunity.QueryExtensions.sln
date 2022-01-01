@@ -1,9 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XperienceCommunity.QueryExtensions", "src\XperienceCommunity.QueryExtensions\XperienceCommunity.QueryExtensions.csproj", "{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XperienceCommunity.QueryExtensions", "src\XperienceCommunity.QueryExtensions\XperienceCommunity.QueryExtensions.csproj", "{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{321D6F63-DB87-460B-AC9D-473BA3A8511F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XperienceCommunity.QueryExtensions.Tests", "tests\XperienceCommunity.QueryExtensions.Tests\XperienceCommunity.QueryExtensions.Tests.csproj", "{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBB60910-6AAA-419A-94C2-F34E761FAACC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{38CE33CA-7D0C-482A-AAEF-613207B48018}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,9 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +45,27 @@ Global
 		{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}.Release|x64.Build.0 = Release|Any CPU
 		{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}.Release|x86.ActiveCfg = Release|Any CPU
 		{49210FC0-531F-43E5-97A0-9EE94E2D8FC3}.Release|x86.Build.0 = Release|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Debug|x64.Build.0 = Debug|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Debug|x86.Build.0 = Debug|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Release|x64.ActiveCfg = Release|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Release|x64.Build.0 = Release|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Release|x86.ActiveCfg = Release|Any CPU
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{49210FC0-531F-43E5-97A0-9EE94E2D8FC3} = {321D6F63-DB87-460B-AC9D-473BA3A8511F}
+		{286FCDC2-EC3E-4EFE-91C6-58BDB33AFD25} = {321D6F63-DB87-460B-AC9D-473BA3A8511F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E8359E7-C3DE-4364-8641-D5B2EE7FBF39}
 	EndGlobalSection
 EndGlobal
