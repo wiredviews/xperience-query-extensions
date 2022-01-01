@@ -99,7 +99,7 @@ ORDER BY NodeID DESC
 var query = DocumentHelper.GetDocuments()
     .OrderByDescending(nameof(TreeNode.NodeID))
     .TopN(1)
-    .TapQuery(fullQueryText => 
+    .TapQuery(fullQueryText =>
     {
         Debug.WriteLine(fullQueryText);
     })
@@ -143,6 +143,14 @@ public async Task QueryDatabase(CancellationToken token)
 ```
 
 ### ObjectQuery
+
+#### Prerequisites
+
+```csharp
+using XperienceCommunity.QueryExtensions.Objects;
+```
+
+#### Examples
 
 ```csharp
 var query = UserInfo.Provider.Get()
@@ -193,6 +201,23 @@ public void QueryDatabase(ILogger logger)
 ```
 
 ```csharp
+var query = UserInfo.Provider.Get()
+    .TapQueryText(text => 
+    {
+        // do something with the query text
+    });
+```
+
+```csharp
+return UserInfo.Provider.Get()
+    .Tap(query => 
+    {
+        // access the query 
+    });
+```
+
+
+```csharp
 public async Task QueryDatabase(CancellationToken token)
 {
     List<UserInfo> recentlyUpdatedUsers = await UserInfo.Provider.Get()
@@ -235,24 +260,32 @@ int total = result.TotalRecords;
 List<TreeNode> pages = result.Items;
 ```
 
-```csharp
-TreeNode? page = await retriever.FirstOrDefaultAsync<TreeNode>(
-    q => q.TopN(1),
-    cancellationToken: token);
-```
-
-```csharp
-IEnumerable<Guid> nodeGuids = await retriever
-    .SelectAsync<LandingPage>(
-        landingPage => landingPage.NodeGUID,
-        cancellationToken: token);
-```
-
 ### Collections
 
+```csharp
+TreeNode? page = await retriever.RetrieveAsync<TreeNode>(
+    q => q.TopN(1),
+    cancellationToken: token)
+    .FirstOrDefaultAsync();
+```
 
 ```csharp
+TreeNode? page = await retriever.RetrieveAsync<TreeNode>(
+    q => q.TopN(1),
+    cancellationToken: token)
+    .FirstOrDefaultAsync();
+```
 
+```csharp
+IList<LandingPage> pages = await retriever
+    .RetrieveAsync<LandingPage>(cancellationToken: token)
+    .ToListAsync();
+```
+
+```csharp
+IList<LandingPage> pages = await retriever
+    .RetrieveAsync<LandingPage>(cancellationToken: token)
+    .ToArrayAsync();
 ```
 
 ## References
@@ -267,3 +300,7 @@ IEnumerable<Guid> nodeGuids = await retriever
 - [Pages API Examples](https://docs.xperience.io/13api/content-management/pages)
 - [Retrieving pages in custom scenarios](https://docs.xperience.io/custom-development/working-with-pages-in-the-api#WorkingwithpagesintheAPI-Retrievingpagesincustomscenarios)
 - [Improvements under the hood – Document and ObjectQuery enumeration without DataSets](https://devnet.kentico.com/articles/improvements-under-the-hood-document-and-objectquery-enumeration-without-datasets)
+
+```
+
+```

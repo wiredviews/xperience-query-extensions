@@ -1,8 +1,8 @@
 using NUnit.Framework;
 
-namespace XperienceCommunity.QueryExtensionsTests
+namespace XperienceCommunity.QueryExtensions.Tests
 {
-    public class Tests
+    public class CollectionExtensionTests
     {
         [SetUp]
         public void Setup()

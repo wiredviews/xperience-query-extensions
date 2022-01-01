@@ -9,62 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace XperienceCommunity.QueryExtensions.Objects
 {
-    public static class XperienceCommunityObjectQueryExtensions
+    public static class XperienceCommunityObjectQueryLoggingExtensions
     {
-        /// <summary>
-        /// Converts the <paramref name="query"/> to a <see cref="List{TObject}"/> of the generic Object type
-        /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
-        /// <returns></returns>
-        public static async Task<IList<TObject>> ToListAsync<TObject>(this ObjectQuery<TObject> query, CancellationToken token = default)
-            where TObject : BaseInfo
-        {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
-
-            return result.ToList();
-        }
-
-        /// <summary>
-        /// Converts the <paramref name="query"/> to a <see cref="List{BaseInfo}"/> of <see cref="BaseInfo" />
-        /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
-        /// <returns></returns>
-        public static async Task<IList<BaseInfo>> ToListAsync(this ObjectQuery query, CancellationToken token = default)
-        {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
-
-            return result.ToList();
-        }
-
-        /// <summary>
-        /// Returns the first item of the <paramref name="query"/> as the generic Object type and null if no items were returned.
-        /// /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
-        /// <returns></returns>
-        public static async Task<TObject?> FirstOrDefaultAsync<TObject>(this ObjectQuery<TObject> query, CancellationToken token = default)
-            where TObject : BaseInfo
-        {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
-
-            return result?.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Returns the first item of the <paramref name="query"/> as a <see cref="BaseInfo" /> and null if no items were returned.
-        /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
-        /// <returns></returns>
-        public static async Task<BaseInfo?> FirstOrDefaultAsync(this ObjectQuery query, CancellationToken token = default)
-        {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
-
-            return result?.FirstOrDefault();
-        }
-
+        
         /// <summary>
         /// Prints the provided query's full materialized query text using <see cref="Console.WriteLine(string)"/>
         /// </summary>
@@ -88,11 +35,11 @@ namespace XperienceCommunity.QueryExtensions.Objects
         /// --- END [User] QUERY ---
         /// </example>
         /// <returns></returns>
-        public static ObjectQuery<TObject> DebugQuery<TObject>(this ObjectQuery<TObject> query, [CallerFilePath] string queryName = "")
-            where TObject : BaseInfo, new()
+        public static ObjectQuery<TInfo> DebugQuery<TInfo>(this ObjectQuery<TInfo> query, [CallerFilePath] string queryName = "")
+            where TInfo : BaseInfo, new()
         {
             queryName = string.IsNullOrWhiteSpace(queryName)
-                ? typeof(TObject).Name
+                ? typeof(TInfo).Name
                 : queryName;
 
             Console.WriteLine(Environment.NewLine);
@@ -110,17 +57,19 @@ namespace XperienceCommunity.QueryExtensions.Objects
             return query;
         }
 
+        
+
         /// <summary>
-        /// Allows the caller to specify an action that has access to the query.
+        /// Allow the caller to specify an action that has access to the full query text at the point
+        /// at which this method is called
         /// </summary>
         /// <param name="query"></param>
         /// <param name="action"></param>
-        /// <typeparam name="TInfo"></typeparam>
         /// <returns></returns>
-        public static ObjectQuery<TInfo> Tap<TInfo>(this ObjectQuery<TInfo> query, Action<ObjectQuery<TInfo>> action)
+        public static ObjectQuery<TInfo> TapQueryText<TInfo>(this ObjectQuery<TInfo> query, Action<string> action)
             where TInfo : BaseInfo, new()
         {
-            action(query);
+            action(query.GetFullQueryText());
 
             return query;
         }
@@ -132,8 +81,7 @@ namespace XperienceCommunity.QueryExtensions.Objects
         /// <param name="query"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static ObjectQuery<TInfo> TapQueryText<TInfo>(this ObjectQuery<TInfo> query, Action<string> action)
-            where TInfo : BaseInfo, new()
+        public static ObjectQuery TapQueryText(this ObjectQuery query, Action<string> action)
         {
             action(query.GetFullQueryText());
 
@@ -170,33 +118,6 @@ namespace XperienceCommunity.QueryExtensions.Objects
         }
 
         /// <summary>
-        /// Allows the caller to specify an action that has access to the query.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static ObjectQuery Tap(this ObjectQuery query, Action<ObjectQuery> action)
-        {
-            action(query);
-
-            return query;
-        }
-
-        /// <summary>
-        /// Allow the caller to specify an action that has access to the full query text at the point
-        /// at which this method is called
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static ObjectQuery TapQueryText(this ObjectQuery query, Action<string> action)
-        {
-            action(query.GetFullQueryText());
-
-            return query;
-        }
-
-        /// <summary>
         /// Prints the provided query's full materialized query text using <see cref="LoggerExtensions.LogDebug(ILogger, string, object[])"/>
         /// </summary>
         /// <param name="query">The current ObjectQuery</param>
@@ -205,11 +126,11 @@ namespace XperienceCommunity.QueryExtensions.Objects
         /// If no value is supplied, the filename containing the calling method will be used. If null or an empty string is supplied, name of the generic will be used.
         /// </param>
         /// <returns></returns>
-        public static ObjectQuery<TObject> LogQuery<TObject>(this ObjectQuery<TObject> query, ILogger logger, [CallerFilePath] string queryName = "")
-            where TObject : BaseInfo, new()
+        public static ObjectQuery<TInfo> LogQuery<TInfo>(this ObjectQuery<TInfo> query, ILogger logger, [CallerFilePath] string queryName = "")
+            where TInfo : BaseInfo, new()
         {
             queryName = string.IsNullOrWhiteSpace(queryName)
-                ? typeof(TObject).Name
+                ? typeof(TInfo).Name
                 : queryName;
 
             logger.LogDebug("Object Query: {queryName} {queryText}", queryName, query.GetFullQueryText());
