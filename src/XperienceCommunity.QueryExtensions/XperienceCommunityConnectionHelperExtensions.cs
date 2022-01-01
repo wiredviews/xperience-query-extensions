@@ -82,10 +82,24 @@ namespace CMS.DataEngine
         /// <returns>The <see cref="QueryInfo" /> if a match is found, and null otherwise</returns>
         public static Task<QueryInfo?> GetCachedQueryAsync(string className, string queryCodeName, int cacheLengthMinutes = 1440, CancellationToken token = default) =>
             CacheHelper.CacheAsync(
-                cs => new ObjectQuery<QueryInfo>()
-                    .Where($"ClassID in (Select top 1 CMS_Class.ClassID from CMS_Class where ClassName = '{SqlHelper.EscapeQuotes(className)}')")
-                    .WhereEquals(nameof(QueryInfo.QueryName), queryCodeName)
-                    .FirstOrDefaultAsync(token)
+                async cs =>
+                {
+                    var query = await new ObjectQuery<QueryInfo>()
+                        .Where($"ClassID in (Select top 1 CMS_Class.ClassID from CMS_Class where ClassName = '{SqlHelper.EscapeQuotes(className)}')")
+                        .WhereEquals(nameof(QueryInfo.QueryName), queryCodeName)
+                        .FirstOrDefaultAsync(token);
+
+                    if (query is null)
+                    {
+                        cs.Cached = false;
+
+                        return query;
+                    }
+
+                    cs.GetCacheDependency = () => CacheHelper.GetCacheDependency($"{QueryInfo.OBJECT_TYPE}|byid|{query.QueryID}");
+
+                    return query;
+                }
                 , new CacheSettings(Math.Clamp(cacheLengthMinutes, 1, int.MaxValue), nameof(GetCachedQueryAsync), className, queryCodeName));
     }
 }
