@@ -100,8 +100,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         }
 
         /// <summary>
-        /// Allow the caller to specify an action that has access to the full query text at the point
-        /// at which this method is called
+        /// Allow the caller to specify an action that has access to the query.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="action"></param>
@@ -109,6 +108,114 @@ namespace XperienceCommunity.QueryExtensions.Documents
         public static MultiDocumentQuery Tap(this MultiDocumentQuery query, Action<string> action)
         {
             action(query.GetFullQueryText());
+
+            return query;
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="condition" /> is true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="condition"></param>
+        /// <param name="ifTrueAction"></param>
+        /// <param name="elseAction"></param>
+        /// <typeparam name="TNode"></typeparam>
+        /// <returns></returns>
+        public static DocumentQuery<TNode> If<TNode>(
+            this DocumentQuery<TNode> query, bool condition,
+            Action<DocumentQuery<TNode>> ifTrueAction,
+            Action<DocumentQuery<TNode>>? elseAction)
+            where TNode : TreeNode, new()
+        {
+            if (condition)
+            {
+                ifTrueAction(query);
+            }
+            else if (elseAction is object)
+            {
+                elseAction(query);
+            }
+
+            return query;
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="condition" /> is true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="condition"></param>
+        /// <param name="ifTrueAction"></param>
+        /// <param name="elseAction"></param>
+        /// <returns></returns>
+        public static MultiDocumentQuery If(
+            this MultiDocumentQuery query, bool condition,
+            Action<MultiDocumentQuery> ifTrueAction,
+            Action<MultiDocumentQuery>? elseAction)
+        {
+            if (condition)
+            {
+                ifTrueAction(query);
+            }
+            else if (elseAction is object)
+            {
+                elseAction(query);
+            }
+
+            return query;
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="predicate" /> returns true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="predicate"></param>
+        /// <param name="ifTrueAction"></param>
+        /// <param name="elseAction"></param>
+        /// <typeparam name="TNode"></typeparam>
+        /// <returns></returns>
+        public static DocumentQuery<TNode> If<TNode>(
+            this DocumentQuery<TNode> query, Func<DocumentQuery<TNode>, bool> predicate,
+            Action<DocumentQuery<TNode>> ifTrueAction,
+            Action<DocumentQuery<TNode>>? elseAction)
+            where TNode : TreeNode, new()
+        {
+            if (predicate(query))
+            {
+                ifTrueAction(query);
+            }
+            else if (elseAction is object)
+            {
+                elseAction(query);
+            }
+
+            return query;
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="predicate" /> returns true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="predicate"></param>
+        /// <param name="ifTrueAction"></param>
+        /// <param name="elseAction"></param>
+        /// <returns></returns>
+        public static MultiDocumentQuery If(
+            this MultiDocumentQuery query, Func<MultiDocumentQuery, bool> predicate,
+            Action<MultiDocumentQuery> ifTrueAction,
+            Action<MultiDocumentQuery>? elseAction)
+        {
+            if (predicate(query))
+            {
+                ifTrueAction(query);
+            }
+            else if (elseAction is object)
+            {
+                elseAction(query);
+            }
 
             return query;
         }
