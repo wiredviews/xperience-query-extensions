@@ -65,7 +65,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         /// <param name="documentID">Value of the <see cref="TreeNode.DocumentID" /> to filter by</param>
         /// <returns></returns>
         public static MultiDocumentQuery WhereDocumentIDEquals<TNode>(this MultiDocumentQuery query, int documentID) where TNode : TreeNode, new() =>
-            query.WhereEquals(nameof(TreeNode.DocumentID), documentID);    
+            query.WhereEquals(nameof(TreeNode.DocumentID), documentID);
 
         /// <summary>
         /// Returns the <see cref="DocumentQuery"/> ordered by <see cref="TreeNode.NodeOrder"/>
@@ -228,7 +228,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         /// <param name="token">Optional cancellation token</param>
         /// <returns></returns>
         public static async Task<IEnumerable<TReturn>> SelectAsync<TDocument, TReturn>(
-            this DocumentQuery<TDocument> query, 
+            this DocumentQuery<TDocument> query,
             Func<TDocument, TReturn> projection,
             CancellationToken token = default)
             where TDocument : TreeNode, new()
@@ -246,7 +246,7 @@ namespace XperienceCommunity.QueryExtensions.Documents
         /// <param name="token">Optional cancellation token</param>
         /// <returns></returns>
         public static async Task<IEnumerable<TReturn>> SelectAsync<TReturn>(
-            this MultiDocumentQuery query, 
+            this MultiDocumentQuery query,
             Func<TreeNode, TReturn> projection,
             CancellationToken token = default)
         {

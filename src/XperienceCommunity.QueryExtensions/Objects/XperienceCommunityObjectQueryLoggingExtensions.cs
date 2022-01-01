@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using CMS.DataEngine;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +7,7 @@ namespace XperienceCommunity.QueryExtensions.Objects
 {
     public static class XperienceCommunityObjectQueryLoggingExtensions
     {
-        
+
         /// <summary>
         /// Prints the provided query's full materialized query text using <see cref="Console.WriteLine(string)"/>
         /// </summary>
@@ -57,7 +53,7 @@ namespace XperienceCommunity.QueryExtensions.Objects
             return query;
         }
 
-        
+
 
         /// <summary>
         /// Allow the caller to specify an action that has access to the full query text at the point

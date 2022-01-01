@@ -29,7 +29,7 @@ namespace CMS.DataEngine
             {
                 throw new Exception($"Could not parse query class name and query code name from query name [{fullQueryName}]");
             }
-            
+
             if (querynameSplit.Length > 2)
             {
                 queryClassName = $"{querynameSplit[0]}.{querynameSplit[1]}";
@@ -52,7 +52,7 @@ namespace CMS.DataEngine
         public static async Task<DataSet> ExecuteQueryAsync(string queryClassName, string queryCodeName, QueryDataParameters parameters, QueryMacros? queryMacros = null, CancellationToken token = default)
         {
             var query = await GetCachedQueryAsync(queryClassName, queryCodeName, token: token);
-         
+
             if (query is null)
             {
                 throw new Exception($"No query found for class name [{queryClassName}] and query name [{queryCodeName}]");
@@ -60,7 +60,7 @@ namespace CMS.DataEngine
 
             using var context = new CMSConnectionScope(query.QueryConnectionString);
 
-            var queryText = (queryMacros ?? new QueryMacros()).ResolveMacros(query.QueryText);
+            string? queryText = (queryMacros ?? new QueryMacros()).ResolveMacros(query.QueryText);
 
             var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, query.QueryType, CommandBehavior.Default, token);
             var table = new DataTable();
@@ -68,7 +68,7 @@ namespace CMS.DataEngine
 
             var ds = new DataSet();
             ds.Tables.Add(table);
-            
+
             return ds;
         }
 

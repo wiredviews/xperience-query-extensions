@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using CMS.DataEngine;
-using Microsoft.Extensions.Logging;
 
 namespace XperienceCommunity.QueryExtensions.Objects
 {
     public static class XperienceCommunityObjectQueryExtensions
     {
         /// <summary>
-        /// 
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="condition" /> is true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="condition"></param>
@@ -39,7 +34,8 @@ namespace XperienceCommunity.QueryExtensions.Objects
         }
 
         /// <summary>
-        /// 
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="condition" /> is true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="condition"></param>
@@ -64,7 +60,8 @@ namespace XperienceCommunity.QueryExtensions.Objects
         }
 
         /// <summary>
-        /// 
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="predicate" /> returns true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="predicate"></param>
@@ -91,7 +88,8 @@ namespace XperienceCommunity.QueryExtensions.Objects
         }
 
         /// <summary>
-        /// 
+        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="predicate" /> returns true, otherwise executes
+        /// the <paramref name="elseAction" /> if it is provided.
         /// </summary>
         /// <param name="query"></param>
         /// <param name="predicate"></param>

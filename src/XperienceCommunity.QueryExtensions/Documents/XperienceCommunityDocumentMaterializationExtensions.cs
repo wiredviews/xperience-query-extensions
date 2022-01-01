@@ -76,8 +76,8 @@ namespace XperienceCommunity.QueryExtensions.Documents
         /// <param name="token">Optional cancellation token</param>
         /// <returns></returns>
         public static async Task<TReturn?> FirstOrDefaultAsync<TDocument, TReturn>(
-            this DocumentQuery<TDocument> query, 
-            Func<TDocument, TReturn> projection, 
+            this DocumentQuery<TDocument> query,
+            Func<TDocument, TReturn> projection,
             CancellationToken token = default)
             where TDocument : TreeNode, new()
             where TReturn : class
