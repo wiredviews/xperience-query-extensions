@@ -202,5 +202,61 @@ namespace XperienceCommunity.QueryExtensions.Tests.Documents
             action.ReceivedCalls().Should().BeEmpty();
             elseAction.ReceivedCalls().Should().HaveCount(1);
         }
+
+        [Test]
+        public void WhereCondition_WhereInPath_Will_Combine_Paths_With_An_Or()
+        {
+            var sut = new DocumentQuery();
+
+            var result = sut.Where(w => w.WhereInPath("path1", "path2"));
+
+            result.WhereCondition.Should().Be("([NodeAliasPath] = @NodeAliasPath OR [NodeAliasPath] = @NodeAliasPath1)");
+            result.Parameters.Should().HaveCount(2);
+
+            var param1 = result.Parameters[0];
+            var param2 = result.Parameters[1];
+
+            param1.Name.Should().Be("@NodeAliasPath");
+            param1.Value.Should().Be("path1");
+
+            param2.Name.Should().Be("@NodeAliasPath1");
+            param2.Value.Should().Be("path2");
+        }
+
+        [Test]
+        public void WhereCondition_WhereInPath_PathType_Children_Will_Combine_Paths_With_An_Or()
+        {
+            var sut = new DocumentQuery();
+
+            var result = sut.Where(w => w.WhereInPath("path1", PathTypeEnum.Children));
+
+            result.WhereCondition.Should().Be("[NodeAliasPath] LIKE @NodeAliasPath");
+            result.Parameters.Should().HaveCount(1);
+
+            var param1 = result.Parameters[0];
+
+            param1.Name.Should().Be("@NodeAliasPath");
+            param1.Value.Should().Be("path1/%");
+        }
+
+        [Test]
+        public void WhereCondition_WhereInPath_PathType_Section_Will_Combine_Paths_With_An_Or()
+        {
+            var sut = new DocumentQuery();
+
+            var result = sut.Where(w => w.WhereInPath("path1", PathTypeEnum.Section));
+
+            result.WhereCondition.Should().Be("([NodeAliasPath] LIKE @NodeAliasPath OR [NodeAliasPath] = @NodeAliasPath1)");
+            result.Parameters.Should().HaveCount(2);
+
+            var param1 = result.Parameters[0];
+            var param2 = result.Parameters[1];
+
+            param1.Name.Should().Be("@NodeAliasPath");
+            param1.Value.Should().Be("path1/%");
+
+            param2.Name.Should().Be("@NodeAliasPath1");
+            param2.Value.Should().Be("/path1");
+        }
     }
 }

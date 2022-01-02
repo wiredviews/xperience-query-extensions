@@ -169,6 +169,11 @@ public void QueryDatabase(ILogger logger)
 }
 ```
 
+```csharp
+var query = DocumentHelper.GetDocuments()
+    .Where(w => w.WhereInPath("path1", "path2"));
+```
+
 ### ObjectQuery
 
 #### Prerequisites
