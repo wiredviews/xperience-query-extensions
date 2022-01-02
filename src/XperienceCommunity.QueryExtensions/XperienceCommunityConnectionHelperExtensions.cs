@@ -8,7 +8,7 @@ using XperienceCommunity.QueryExtensions.Objects;
 
 namespace CMS.DataEngine
 {
-    public static class XperienceCommunityConnectionHelperExtensions
+    public static class XperienceCommunityConnectionHelper
     {
         /// <summary>
         /// Executes the given <see cref="QueryInfo" /> asynchronously

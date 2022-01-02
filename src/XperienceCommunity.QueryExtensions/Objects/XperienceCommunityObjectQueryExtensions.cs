@@ -86,59 +86,5 @@ namespace XperienceCommunity.QueryExtensions.Objects
 
             return query;
         }
-
-        /// <summary>
-        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="predicate" /> returns true, otherwise executes
-        /// the <paramref name="elseAction" /> if it is provided.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="predicate"></param>
-        /// <param name="ifTrueAction"></param>
-        /// <param name="elseAction"></param>
-        /// <typeparam name="TInfo"></typeparam>
-        /// <returns></returns>
-        public static ObjectQuery<TInfo> If<TInfo>(
-            this ObjectQuery<TInfo> query, Func<ObjectQuery<TInfo>, bool> predicate,
-            Action<ObjectQuery<TInfo>> ifTrueAction,
-            Action<ObjectQuery<TInfo>>? elseAction = null)
-            where TInfo : BaseInfo, new()
-        {
-            if (predicate(query))
-            {
-                ifTrueAction(query);
-            }
-            else if (elseAction is object)
-            {
-                elseAction(query);
-            }
-
-            return query;
-        }
-
-        /// <summary>
-        /// Executes the <paramref name="ifTrueAction" /> if the <paramref name="predicate" /> returns true, otherwise executes
-        /// the <paramref name="elseAction" /> if it is provided.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="predicate"></param>
-        /// <param name="ifTrueAction"></param>
-        /// <param name="elseAction"></param>
-        /// <returns></returns>
-        public static ObjectQuery If(
-            this ObjectQuery query, Func<ObjectQuery, bool> predicate,
-            Action<ObjectQuery> ifTrueAction,
-            Action<ObjectQuery>? elseAction = null)
-        {
-            if (predicate(query))
-            {
-                ifTrueAction(query);
-            }
-            else if (elseAction is object)
-            {
-                elseAction(query);
-            }
-
-            return query;
-        }
     }
 }

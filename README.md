@@ -16,11 +16,31 @@ This package is compatible with ASP.NET Core 3.1 -> ASP.NET Core 5 applications 
    dotnet add package XperienceCommunity.QueryExtensions
    ```
 
-1. The extension methods are all in the `Kentico.Content.Web.Mvc`, `CMS.DocumentEngine` and `CMS.DataEngine` namespaces, so assuming you have the package installed you should see them appear in Intellisense.
+1. Add the correct `using` to have the extensions appear in intellisense
 
-## Extension Method Examples
+   `using XperienceCommunity.QueryExtensions.Documents;`
+
+   `using XperienceCommunity.QueryExtensions.Objects;`
+
+   `using XperienceCommunity.QueryExtensions.Collections;`
+
+   > The extension methods are all in explicit namespaces to prevent conflicts with extensions that Xperience might add in the future or extensions that the developer might have already created.
+   >
+   > If you are using C# 10, you can apply these globally with [C# 10 implicit usings](https://docs.microsoft.com/en-us/dotnet/core/project-sdk/overview#implicit-using-directives)
+
+## Extension Methods
 
 ### DocumentQuery
+
+#### Prerequisites
+
+```csharp
+using XperienceCommunity.QueryExtensions.Documents;
+```
+
+#### Examples
+
+> These work for both `DocumentQuery<T>` and `MultiDocumentQuery`
 
 ```csharp
 public void QueryDocument(Guid nodeGuid)
@@ -49,6 +69,39 @@ public void QueryDocument(int documentID)
 ```csharp
 var query = DocumentHelper.GetDocuments()
     .OrderByNodeOrder();
+```
+
+```csharp
+var query = DocumentHelper.GetDocuments()
+    .Tap(q => 
+    {
+        // access the query 'q'
+    });
+```
+
+```csharp
+bool condition = ...
+
+var query = DocumentHelper.GetDocuments()
+    .If(condition, q => 
+    {
+        // when condition is true
+    });
+```
+
+```csharp
+bool condition = ...
+
+var query = DocumentHelper.GetDocuments()
+    .If(condition, 
+    q => 
+    {
+        // when condition is true
+    }, 
+    q =>
+    {
+        // when condition is false
+    });
 ```
 
 ```csharp
@@ -99,7 +152,7 @@ ORDER BY NodeID DESC
 var query = DocumentHelper.GetDocuments()
     .OrderByDescending(nameof(TreeNode.NodeID))
     .TopN(1)
-    .TapQuery(fullQueryText =>
+    .TapQueryText(fullQueryText =>
     {
         Debug.WriteLine(fullQueryText);
     })
@@ -116,32 +169,6 @@ public void QueryDatabase(ILogger logger)
 }
 ```
 
-```csharp
-public async Task QueryDatabase(CancellationToken token)
-{
-    List<TreeNode> pages = await DocumentHelper.GetDocuments()
-        .TopN(5)
-        .ToListAsync(token);
-}
-```
-
-```csharp
-public async Task QueryDatabase(CancellationToken token)
-{
-    TreeNode? newestPage = await DocumentHelper.GetDocuments()
-        .OrderByDescending(nameof(TreeNode.NodeID))
-        .TopN(1)
-        .FirstOrDefaultAsync(token);
-
-    if (newestPage is null)
-    {
-        return;
-    }
-
-    // ...
-}
-```
-
 ### ObjectQuery
 
 #### Prerequisites
@@ -151,6 +178,39 @@ using XperienceCommunity.QueryExtensions.Objects;
 ```
 
 #### Examples
+
+```csharp
+return UserInfo.Provider.Get()
+    .Tap(q =>
+    {
+        // access the query
+    });
+```
+
+```csharp
+bool condition = ...
+
+var query = UserInfo.Provider.Get()
+    .If(condition, q => 
+    {
+        // when condition is true
+    });
+```
+
+```csharp
+bool condition = ...
+
+var query = UserInfo.Provider.Get()
+    .If(condition, 
+    q => 
+    {
+        // when condition is true
+    }, 
+    q =>
+    {
+        // when condition is false
+    });
+```
 
 ```csharp
 var query = UserInfo.Provider.Get()
@@ -202,90 +262,78 @@ public void QueryDatabase(ILogger logger)
 
 ```csharp
 var query = UserInfo.Provider.Get()
-    .TapQueryText(text => 
+    .TapQueryText(text =>
     {
         // do something with the query text
     });
 ```
 
-```csharp
-return UserInfo.Provider.Get()
-    .Tap(query => 
-    {
-        // access the query 
-    });
-```
-
-
-```csharp
-public async Task QueryDatabase(CancellationToken token)
-{
-    List<UserInfo> recentlyUpdatedUsers = await UserInfo.Provider.Get()
-        .OrderByDesc(nameof(UserInfo.UserLastModified))
-        .TopN(10)
-        .ToListAsync(token);
-}
-```
-
-```csharp
-public async Task QueryDatabase(CancellationToken token)
-{
-    UserInfo? user = await UserInfo.Provider.Get()
-        .OrderByDesc(nameof(UserInfo.UserLastModified))
-        .TopN(1)
-        .FirstOrDefaultAsync(token);
-
-    if (user is null)
-    {
-        return;
-    }
-
-    // ...
-}
-```
-
-### PageRetriever
-
-```csharp
-int pageIndex = 3;
-int pageSize = 10;
-
-var result = await retriever.RetrievePagedAsync<TreeNode>(
-    pageIndex,
-    pageSize,
-    q => q.OrderByNodeOrder(),
-    cancellationToken: token);
-
-int total = result.TotalRecords;
-List<TreeNode> pages = result.Items;
-```
-
 ### Collections
 
+#### Requirements
+
 ```csharp
-TreeNode? page = await retriever.RetrieveAsync<TreeNode>(
-    q => q.TopN(1),
-    cancellationToken: token)
+using XperienceCommunity.QueryExtensions.Collections;
+```
+
+#### Examples
+
+```csharp
+TreeNode? page = await retriever
+    .RetrieveAsync<TreeNode>(q => q.TopN(1), cancellationToken: token)
     .FirstOrDefaultAsync();
 ```
 
 ```csharp
-TreeNode? page = await retriever.RetrieveAsync<TreeNode>(
-    q => q.TopN(1),
-    cancellationToken: token)
-    .FirstOrDefaultAsync();
-```
-
-```csharp
-IList<LandingPage> pages = await retriever
-    .RetrieveAsync<LandingPage>(cancellationToken: token)
+IList<TreeNode> pages = await retriever
+    .RetrieveAsync<TreeNode>(cancellationToken: token)
     .ToListAsync();
 ```
 
 ```csharp
-IList<LandingPage> pages = await retriever
-    .RetrieveAsync<LandingPage>(cancellationToken: token)
+IList<TreeNode> pages = await retriever
+    .RetrieveAsync<TreeNode>(cancellationToken: token)
     .ToArrayAsync();
+```
+
+### PageRetriever
+
+#### Requirements
+
+```csharp
+using Kentico.Content.Web.Mvc;
+```
+
+#### Examples
+
+```csharp
+void GetPages(int pageIndex, int pageSize)
+{
+    var result = await retriever.RetrievePagedAsync<TreeNode>(
+        pageIndex,
+        pageSize,
+        q => q.OrderByNodeOrder(),
+        cancellationToken: token);
+
+    int total = result.TotalRecords;
+    List<TreeNode> pages = result.Items;
+
+    // or
+
+    var (totalRecords, pages) = await retriever.RetrievePagedAsync<TreeNode>(
+        pageIndex,
+        pageSize,
+        q => q.OrderByNodeOrder(),
+        cancellationToken: token);
+}
+```
+
+### XperienceCommunityConnectionHelper
+
+#### Examples
+
+```csharp
+var dataSet = await XperienceCommunityConnectionHelper.ExecuteQueryAsync("CMS.User", "GetAllUsersCustom");
 ```
 
 ## References
@@ -300,7 +348,3 @@ IList<LandingPage> pages = await retriever
 - [Pages API Examples](https://docs.xperience.io/13api/content-management/pages)
 - [Retrieving pages in custom scenarios](https://docs.xperience.io/custom-development/working-with-pages-in-the-api#WorkingwithpagesintheAPI-Retrievingpagesincustomscenarios)
 - [Improvements under the hood – Document and ObjectQuery enumeration without DataSets](https://devnet.kentico.com/articles/improvements-under-the-hood-document-and-objectquery-enumeration-without-datasets)
-
-```
-
-```

@@ -15,7 +15,7 @@
         "**/obj": true
     },
 
-    "omnisharp.defaultLaunchSolution": "Xperience.QueryExtensions.sln",
+    "omnisharp.defaultLaunchSolution": "XperienceCommunity.QueryExtensions.sln",
     "omnisharp.useEditorFormattingSettings": true,
     "omnisharp.enableImportCompletion": true
 }
