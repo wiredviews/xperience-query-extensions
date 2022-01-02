@@ -55,6 +55,23 @@ namespace XperienceCommunity.QueryExtensions.Documents
         }
 
         /// <summary>
+        /// Converts the <paramref name="query"/> to a <see cref="List{T}"/> of <see cref="TreeNode"/>
+        /// </summary>
+        /// <param name="query">The current MultiDocumentQuery</param>
+        /// <param name="projection">Mapping function from <see cref="TreeNode"/> to <typeparamref name="TReturn" /></param>
+        /// <param name="token">Optional cancellation token</param>
+        /// <returns></returns>
+        public static async Task<IList<TReturn>> ToListAsync<TReturn>(
+            this MultiDocumentQuery query,
+            Func<TreeNode, TReturn> projection,
+            CancellationToken token = default)
+        {
+            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
+
+            return result.Select(projection).ToList();
+        }
+
+        /// <summary>
         /// Returns the first item of the <paramref name="query"/> as the generic Page type and null if no items were returned.
         /// </summary>
         /// <param name="query">The current DocumentQuery</param>
