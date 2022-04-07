@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -63,11 +64,38 @@ namespace CMS.DataEngine
             string? queryText = (queryMacros ?? new QueryMacros()).ResolveMacros(query.QueryText);
 
             var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, query.QueryType, CommandBehavior.Default, token);
-            var table = new DataTable();
-            table.Load(reader);
+            return DataReaderToDataSet(reader);
+        }
 
+        /// <summary>
+        /// Runs the query.
+        /// </summary>
+        /// <param name="queryText">Query text</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="queryType">Query type</param>
+        /// <param name="token">Cancellation token</param>
+        /// <returns>A dataset with query results</returns>
+        public static async Task<DataSet> ExecuteQueryAsync(string queryText, QueryDataParameters parameters, QueryTypeEnum queryType, CancellationToken token = default)
+        {
+            var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, queryType, CommandBehavior.Default, token);
+            return DataReaderToDataSet(reader);
+        }
+
+        /// <summary>
+        /// Converts a DbDataReader to a DataSet, handles multiple tables in return result.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        private static DataSet DataReaderToDataSet(DbDataReader reader)
+        {
             var ds = new DataSet();
-            ds.Tables.Add(table);
+            // read each data result into a datatable
+            do
+            {
+                var table = new DataTable();
+                table.Load(reader);
+                ds.Tables.Add(table);
+            } while (!reader.IsClosed);
 
             return ds;
         }
@@ -102,4 +130,5 @@ namespace CMS.DataEngine
                 }
                 , new CacheSettings(Math.Clamp(cacheLengthMinutes, 1, int.MaxValue), nameof(GetCachedQueryAsync), className, queryCodeName));
     }
+
 }
