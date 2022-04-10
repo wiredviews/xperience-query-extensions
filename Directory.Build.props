@@ -16,6 +16,11 @@
 		<PackageReleaseNotes>https://github.com/wiredviews/xperience-query-extensions/releases</PackageReleaseNotes>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)\images\wv-logo.png" Pack="true" Visible="false" PackagePath="" />
+		<None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath=""/>
+	</ItemGroup>
+
 	<PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>1591</NoWarn>
@@ -29,9 +34,5 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="..\..\images\wv-logo.png" Pack="true" Visible="false" PackagePath="" />
-	</ItemGroup>
 
 </Project>

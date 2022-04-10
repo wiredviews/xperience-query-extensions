@@ -1,5 +1,9 @@
 # Xperience Query Extensions
 
+[![GitHub Actions CI: Build](https://github.com/wiredviews/xperience-query-extensions/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/wiredviews/xperience-query-extensions/actions/workflows/ci.yml)
+
+[![Publish Packages to NuGet](https://github.com/wiredviews/xperience-query-extensions/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/wiredviews/xperience-query-extensions/actions/workflows/publish.yml)
+
 [![NuGet Package](https://img.shields.io/nuget/v/XperienceCommunity.QueryExtensions.svg)](https://www.nuget.org/packages/XperienceCommunity.QueryExtensions)
 
 This package provides a set of extension methods for Kentico Xperience 13.0 `DocumentQuery`, `MultiDocumentQuery`, `ObjectQuery`, and `IPageRetriever` [data access APIs](https://docs.xperience.io/13api/content-management/pages).
