@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
 	<PropertyGroup>
-		<Company>WiredViews</Company>
+		<Company>WiredViews, Inc</Company>
 		<Authors>$(Company)</Authors>
 		<Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year)</Copyright>
 		<Trademark>$(Company)™</Trademark>
@@ -12,6 +12,7 @@
 		<Title>$(Product)</Title>
 		<PackageProjectUrl>https://github.com/wiredviews/xperience-query-extensions</PackageProjectUrl>
 		<PackageIcon>wv-logo.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>xperience;kentico</PackageTags>
 		<PackageReleaseNotes>https://github.com/wiredviews/xperience-query-extensions/releases</PackageReleaseNotes>
 	</PropertyGroup>
