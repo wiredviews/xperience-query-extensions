@@ -345,6 +345,21 @@ void GetPages(int pageIndex, int pageSize)
 var dataSet = await XperienceCommunityConnectionHelper.ExecuteQueryAsync("CMS.User", "GetAllUsersCustom");
 ```
 
+```csharp
+string queryText = @"
+SELECT *
+FROM CMS_User
+WHERE UserID = @UserID
+"
+
+var queryParams = new QueryDataParameters
+{
+    { "UserID", 3 }
+};
+
+var dataSet = await XperienceCommunityConnectionHelper.ExecuteQueryAsync(queryText, queryParams, token: token);
+```
+
 ## References
 
 ### .NET
