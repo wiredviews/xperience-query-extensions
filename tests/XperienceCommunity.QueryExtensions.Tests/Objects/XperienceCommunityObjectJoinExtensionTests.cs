@@ -49,7 +49,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            string[] lines = query.GetFullQueryText().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             string[] expected = new[]
             {
@@ -76,7 +76,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            string[] lines = query.GetFullQueryText().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             string[] expected = new[]
             {
@@ -102,7 +102,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            string[] lines = query.GetFullQueryText().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             string[] expected = new[]
             {
@@ -128,7 +128,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            string[] lines = query.GetFullQueryText().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
             string[] expected = new[]
             {
