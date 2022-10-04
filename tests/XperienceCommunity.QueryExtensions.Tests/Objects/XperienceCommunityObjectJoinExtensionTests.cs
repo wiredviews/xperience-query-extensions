@@ -49,9 +49,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            var lines = query.GetFullQueryText()
-                .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                .Where(l => !string.IsNullOrWhiteSpace(l));
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             string[] expected = new[]
             {
@@ -78,9 +76,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            var lines = query.GetFullQueryText()
-                .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                .Where(l => !string.IsNullOrWhiteSpace(l));
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             string[] expected = new[]
             {
@@ -106,9 +102,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            var lines = query.GetFullQueryText()
-                .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                .Where(l => !string.IsNullOrWhiteSpace(l));
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             string[] expected = new[]
             {
@@ -134,9 +128,7 @@ namespace XperienceCommunity.QueryExtensions.Tests.Objects
                     new WhereCondition("XYZ.UserWaitingForApproval = 1"),
                     hints: new[] { SqlHints.NOLOCK }));
 
-            var lines = query.GetFullQueryText()
-                .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                .Where(l => !string.IsNullOrWhiteSpace(l));
+            string[] lines = query.GetFullQueryText().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             string[] expected = new[]
             {
