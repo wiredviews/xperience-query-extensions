@@ -277,6 +277,31 @@ var query = UserInfo.Provider.Get()
     });
 ```
 
+```csharp
+var query = UserInfo.Provider.Get()
+    .Source(s => s.InnerJoin<UserSettingInfo>(
+        "UserID", 
+        "UserSettingUserID", 
+        "MY_ALIAS",
+        new WhereCondition("MY_ALIAS.UserWaitingForApproval", QueryOperator.Equals, true),
+        new[] { SqlHints.NOLOCK }))
+    .TopN(1)
+    .DebugQuery("User");
+
+/*
+--- QUERY [User] START ---
+
+
+SELECT TOP 1 *
+FROM CMS_User
+INNER JOIN CMS_UserSetting AS MY_ALIAS WITH (NOLOCK) ON UserID = MY_ALIAS.UserSettingUserID AND MY_ALIAS.UserWaitingForApproval = 1
+ORDER BY UserLastModified DESC
+
+
+--- QUERY [User] END ---
+*/
+```
+
 ### Collections
 
 #### Requirements
