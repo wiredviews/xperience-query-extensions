@@ -1,66 +1,64 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.DataEngine;
+using XperienceCommunity.QueryExtensions.DataSets;
 
 namespace XperienceCommunity.QueryExtensions.Objects
 {
     public static class XperienceCommunityObjectQueryMaterializationExtensions
     {
         /// <summary>
-        /// Converts the <paramref name="query"/> to a <see cref="List{TInfo}"/> of the generic Object type
+        /// Executes the current query and returns it as a DataSet.  Extension method to convert ExecuteReaderAsync's IDataReader into a DataSet.
         /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
-        /// <returns></returns>
-        public static async Task<IList<TInfo>> ToListAsync<TInfo>(this ObjectQuery<TInfo> query, CancellationToken token = default)
-            where TInfo : BaseInfo
+        /// <typeparam name="TObject">The Object Type</typeparam>
+        /// <param name="baseQuery"></param>
+        /// <param name="commandBehavior">Command behavior for the reader.</param>
+        /// <param name="newConnection">If true, the reader will be executed using its own dedicated connection.</param>
+        /// <param name="cancellationToken">The cancellation instruction.</param>
+        /// <returns>Returns a task returning either the data set with one table.</returns>
+        public static async Task<DataSet> ExecuteAsync<TObject>(this ObjectQuery<TObject> baseQuery, CommandBehavior commandBehavior = CommandBehavior.Default, bool newConnection = false, CancellationToken? cancellationToken = null) where TObject : BaseInfo, new()
         {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
-
-            return result.ToList();
+            var reader = await baseQuery.ExecuteReaderAsync(commandBehavior, newConnection, cancellationToken);
+            return DataReaderToDataSet(reader);
         }
 
         /// <summary>
-        /// Converts the <paramref name="query"/> to a <see cref="List{BaseInfo}"/> of <see cref="BaseInfo" />
+        /// Executes the current query and returns it as a DataSet.  Extension method to convert ExecuteReaderAsync's IDataReader into a DataSet.
         /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
-        /// <returns></returns>
-        public static async Task<IList<BaseInfo>> ToListAsync(this ObjectQuery query, CancellationToken token = default)
+        /// <param name="baseQuery"></param>
+        /// <param name="commandBehavior">Command behavior for the reader.</param>
+        /// <param name="newConnection">If true, the reader will be executed using its own dedicated connection.</param>
+        /// <param name="cancellationToken">The cancellation instruction.</param>
+        /// <returns>Returns a task returning either the data set with one table.</returns>
+        public static async Task<DataSet> ExecuteAsync(this ObjectQuery baseQuery, CommandBehavior commandBehavior = CommandBehavior.Default, bool newConnection = false, CancellationToken? cancellationToken = null)
         {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
-
-            return result.ToList();
+            var reader = await baseQuery.ExecuteReaderAsync(commandBehavior, newConnection, cancellationToken);
+            return DataReaderToDataSet(reader);
         }
 
         /// <summary>
-        /// Returns the first item of the <paramref name="query"/> as the generic Object type and null if no items were returned.
-        /// /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
-        /// <returns></returns>
-        public static async Task<TInfo?> FirstOrDefaultAsync<TInfo>(this ObjectQuery<TInfo> query, CancellationToken token = default)
-            where TInfo : BaseInfo
-        {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
-
-            return result?.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Returns the first item of the <paramref name="query"/> as a <see cref="BaseInfo" /> and null if no items were returned.
+        /// Converts a DbDataReader to a DataSet, handles multiple tables in return result.
         /// </summary>
-        /// <param name="query">The current ObjectQuery</param>
-        /// <param name="token">Optional cancellation token</param>
+        /// <param name="reader"></param>
         /// <returns></returns>
-        public static async Task<BaseInfo?> FirstOrDefaultAsync(this ObjectQuery query, CancellationToken token = default)
+        private static DataSet DataReaderToDataSet(IDataReader reader)
         {
-            var result = await query.GetEnumerableTypedResultAsync(cancellationToken: token);
+            if (reader is null)
+            {
+                return new DataSet().AddEmptyTable();
+            }
 
-            return result?.FirstOrDefault();
+            var ds = new DataSet();
+            // read each data result into a datatable
+            do
+            {
+                var table = new DataTable();
+                table.Load(reader);
+                ds.Tables.Add(table);
+            } while (!reader.IsClosed);
+
+            return ds;
         }
-
     }
 }

@@ -22,6 +22,20 @@
     },
 
     {
+      "label": "test",
+      "command": "dotnet",
+      "type": "shell",
+      "args": [
+        "test",
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "silent"
+      },
+      "problemMatcher": "$msCompile"
+    },
+
+    {
       "label": "restore",
       "command": "dotnet",
       "type": "shell",

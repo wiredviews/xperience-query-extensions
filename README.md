@@ -283,8 +283,8 @@ var query = UserInfo.Provider.Get()
         "UserID", 
         "UserSettingUserID", 
         "MY_ALIAS",
-        new WhereCondition("MY_ALIAS.UserWaitingForApproval", QueryOperator.Equals, true),
-        new[] { SqlHints.NOLOCK }))
+        additionalCondition: new WhereCondition("MY_ALIAS.UserWaitingForApproval", QueryOperator.Equals, true),
+        hints: new[] { SqlHints.NOLOCK }))
     .TopN(1)
     .DebugQuery("User");
 
@@ -300,6 +300,31 @@ ORDER BY UserLastModified DESC
 
 --- QUERY [User] END ---
 */
+```
+
+```csharp
+// ExecuteAsync returns a populated dataset with all the columns returned by the query.
+// When there are no results, dataset.Tables[0] will still be populated with an empty DataTable.
+
+var dataset = await UserInfo.Provider.Get()
+    .Source(source => source
+        .InnerJoin<UserSettingInfo>(
+            "UserID", 
+            "UserSettingUserID", 
+            "MY_ALIAS")
+        .InnerJoin<CustomerInfo>(
+            "CustomerUserID",
+            "UserID",
+            "C",
+            )
+        )
+    .Columns("UserID", "UserSettingID", "CustomerID")
+    .ExecuteAsync();
+    
+foreach (var row in dataset.Tables[0].Rows)
+{
+    Console.WriteLine($"User: {row["UserID"]}, User Setting: {row["UserSettingID"]}, Customer: {row["CustomerID"]}");
+}
 ```
 
 ### Collections
