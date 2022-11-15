@@ -82,12 +82,46 @@ namespace CMS.DataEngine
         }
 
         /// <summary>
+        /// Executes the current query and returns it as a DataSet.  Extension method to convert ExecuteReaderAsync's IDataReader into a DataSet.
+        /// </summary>
+        /// <typeparam name="TObject">The Object Type</typeparam>
+        /// <param name="baseQuery"></param>
+        /// <param name="commandBehavior">Command behavior for the reader.</param>
+        /// <param name="newConnection">If true, the reader will be executed using its own dedicated connection.</param>
+        /// <param name="cancellationToken">The cancellation instruction.</param>
+        /// <returns>Returns a task returning either the data set with one table.</returns>
+        public static async Task<DataSet> ExecuteAsync<TObject>(this ObjectQuery<TObject> baseQuery, CommandBehavior commandBehavior = CommandBehavior.Default, bool newConnection = false, CancellationToken? cancellationToken = null) where TObject : BaseInfo, new()
+        {
+            var reader = await baseQuery.ExecuteReaderAsync(commandBehavior, newConnection, cancellationToken);
+            return DataReaderToDataSet(reader);
+        }
+
+        /// <summary>
+        /// Executes the current query and returns it as a DataSet.  Extension method to convert ExecuteReaderAsync's IDataReader into a DataSet.
+        /// </summary>
+        /// <param name="baseQuery"></param>
+        /// <param name="commandBehavior">Command behavior for the reader.</param>
+        /// <param name="newConnection">If true, the reader will be executed using its own dedicated connection.</param>
+        /// <param name="cancellationToken">The cancellation instruction.</param>
+        /// <returns>Returns a task returning either the data set with one table.</returns>
+        public static async Task<DataSet> ExecuteAsync(this ObjectQuery baseQuery, CommandBehavior commandBehavior = CommandBehavior.Default, bool newConnection = false, CancellationToken? cancellationToken = null)
+        {
+            var reader = await baseQuery.ExecuteReaderAsync(commandBehavior, newConnection, cancellationToken);
+            return DataReaderToDataSet(reader);
+        }
+
+        /// <summary>
         /// Converts a DbDataReader to a DataSet, handles multiple tables in return result.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
         private static DataSet DataReaderToDataSet(DbDataReader reader)
         {
+            if (reader == null)
+            {
+                return EmptyDataSet();
+            }
+
             var ds = new DataSet();
             // read each data result into a datatable
             do
@@ -97,6 +131,38 @@ namespace CMS.DataEngine
                 ds.Tables.Add(table);
             } while (!reader.IsClosed);
 
+            return ds;
+        }
+
+        /// <summary>
+        /// Converts a DbDataReader to a DataSet, handles multiple tables in return result.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        private static DataSet DataReaderToDataSet(IDataReader reader)
+        {
+            if (reader == null)
+            {
+                return EmptyDataSet();
+            }
+
+            var ds = new DataSet();
+            // read each data result into a datatable
+            do
+            {
+                var table = new DataTable();
+                table.Load(reader);
+                ds.Tables.Add(table);
+            } while (!reader.IsClosed);
+
+            return ds;
+        }
+
+        private static DataSet EmptyDataSet()
+        {
+            var table = new DataTable();
+            var ds = new DataSet();
+            ds.Tables.Add(table);
             return ds;
         }
 
