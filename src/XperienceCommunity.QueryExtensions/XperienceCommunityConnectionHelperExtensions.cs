@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CMS.DocumentEngine;
 using CMS.Helpers;
 using XperienceCommunity.QueryExtensions.DataSets;
 
@@ -11,6 +12,41 @@ namespace CMS.DataEngine
 {
     public static class XperienceCommunityConnectionHelper
     {
+
+        /// <summary>
+        /// Executes and returns as a DataSet (or a table with no rows if none found)
+        /// </summary>
+        /// <param name="baseQuery"></param>
+        /// <returns></returns>
+        public static async Task<DataSet> ExecuteAsync(this DocumentQuery baseQuery)
+        {
+            var results = await baseQuery.ExecuteReaderAsync();
+            return DataReaderToDataSet(results);
+        }
+
+        /// <summary>
+        /// Executes and returns as a DataSet (or a table with no rows if none found)
+        /// </summary>
+        /// <typeparam name="TDocument"></typeparam>
+        /// <param name="baseQuery"></param>
+        /// <returns></returns>
+        public static async Task<DataSet> ExecuteAsync<TDocument>(this DocumentQuery<TDocument> baseQuery) where TDocument : TreeNode, new()
+        {
+            var results = await baseQuery.ExecuteReaderAsync();
+            return DataReaderToDataSet(results);
+        }
+
+        /// <summary>
+        /// Executes and returns as a DataSet (or a table with no rows if none found)
+        /// </summary>
+        /// <param name="baseQuery"></param>
+        /// <returns></returns>
+        public static async Task<DataSet> ExecuteAsync(this MultiDocumentQuery baseQuery)
+        {
+            var results = await baseQuery.ExecuteReaderAsync();
+            return DataReaderToDataSet(results);
+        }
+
         /// <summary>
         /// Executes the given <see cref="QueryInfo" /> asynchronously
         /// </summary>
@@ -64,7 +100,7 @@ namespace CMS.DataEngine
             string? queryText = (queryMacros ?? new QueryMacros()).ResolveMacros(query.QueryText);
 
             var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, query.QueryType, CommandBehavior.Default, token);
-            return DataReaderToDataSet(reader);
+            return DbDataReaderToDataSet(reader);
         }
 
         /// <summary>
@@ -78,7 +114,7 @@ namespace CMS.DataEngine
         public static async Task<DataSet> ExecuteQueryAsync(string queryText, QueryDataParameters parameters, QueryTypeEnum queryType, CancellationToken token = default)
         {
             var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, queryType, CommandBehavior.Default, token);
-            return DataReaderToDataSet(reader);
+            return DbDataReaderToDataSet(reader);
         }
 
         /// <summary>
@@ -86,7 +122,7 @@ namespace CMS.DataEngine
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        private static DataSet DataReaderToDataSet(DbDataReader reader)
+        private static DataSet DbDataReaderToDataSet(DbDataReader reader)
         {
             if (reader is null)
             {
