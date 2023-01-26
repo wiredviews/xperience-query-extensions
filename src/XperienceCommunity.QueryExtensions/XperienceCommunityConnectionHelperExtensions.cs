@@ -142,6 +142,30 @@ namespace CMS.DataEngine
         }
 
         /// <summary>
+        /// Converts a DbDataReader to a DataSet, handles multiple tables in return result.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        private static DataSet DataReaderToDataSet(IDataReader reader)
+        {
+            if (reader is null)
+            {
+                return new DataSet().AddEmptyTable();
+            }
+
+            var ds = new DataSet();
+            // read each data result into a datatable
+            do
+            {
+                var table = new DataTable();
+                table.Load(reader);
+                ds.Tables.Add(table);
+            } while (!reader.IsClosed);
+
+            return ds;
+        }
+
+        /// <summary>
         /// Retrieves and caches the <see cref="QueryInfo" /> matching the provided parameters
         /// </summary>
         /// <param name="className">The CMS object CLASS_NAME of the query</param>
