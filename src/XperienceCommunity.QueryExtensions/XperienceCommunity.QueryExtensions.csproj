@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Description>This package provides helpful extension methods for the various Kentico Xperience Document/Object query, and System.Collections.Generic APIs.</Description>
 	</PropertyGroup>
 
