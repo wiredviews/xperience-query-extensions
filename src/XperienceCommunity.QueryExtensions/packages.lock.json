@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    ".NETCoreApp,Version=v3.1": {
+    "net6.0": {
       "Kentico.Xperience.AspNetCore.WebApp": {
         "type": "Direct",
         "requested": "[13.0.0, 13.1.0)",
