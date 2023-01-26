@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.Helpers;
-using XperienceCommunity.QueryExtensions.Objects;
+using XperienceCommunity.QueryExtensions.DataSets;
 
 namespace CMS.DataEngine
 {
@@ -88,6 +88,11 @@ namespace CMS.DataEngine
         /// <returns></returns>
         private static DataSet DataReaderToDataSet(DbDataReader reader)
         {
+            if (reader is null)
+            {
+                return new DataSet().AddEmptyTable();
+            }
+
             var ds = new DataSet();
             // read each data result into a datatable
             do
@@ -112,21 +117,23 @@ namespace CMS.DataEngine
             CacheHelper.CacheAsync(
                 async cs =>
                 {
-                    var query = await new ObjectQuery<QueryInfo>()
+                    var results = await new ObjectQuery<QueryInfo>()
                         .Where($"ClassID in (Select top 1 CMS_Class.ClassID from CMS_Class where ClassName = '{SqlHelper.EscapeQuotes(className)}')")
                         .WhereEquals(nameof(QueryInfo.QueryName), queryCodeName)
-                        .FirstOrDefaultAsync(token);
+                        .GetEnumerableTypedResultAsync(cancellationToken: token);
 
-                    if (query is null)
+                    var result = results.FirstOrDefault();
+
+                    if (result is null)
                     {
                         cs.Cached = false;
 
-                        return query;
+                        return result;
                     }
 
-                    cs.GetCacheDependency = () => CacheHelper.GetCacheDependency($"{QueryInfo.OBJECT_TYPE}|byid|{query.QueryID}");
+                    cs.GetCacheDependency = () => CacheHelper.GetCacheDependency($"{QueryInfo.OBJECT_TYPE}|byid|{result.QueryID}");
 
-                    return query;
+                    return result;
                 }
                 , new CacheSettings(Math.Clamp(cacheLengthMinutes, 1, int.MaxValue), nameof(GetCachedQueryAsync), className, queryCodeName));
     }
