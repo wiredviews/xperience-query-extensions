@@ -100,7 +100,7 @@ namespace CMS.DataEngine
             string? queryText = (queryMacros ?? new QueryMacros()).ResolveMacros(query.QueryText);
 
             var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, query.QueryType, CommandBehavior.Default, token);
-            return DataReaderToDataSet(reader);
+            return DbDataReaderToDataSet(reader);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace CMS.DataEngine
         public static async Task<DataSet> ExecuteQueryAsync(string queryText, QueryDataParameters parameters, QueryTypeEnum queryType, CancellationToken token = default)
         {
             var reader = await ConnectionHelper.ExecuteReaderAsync(queryText, parameters, queryType, CommandBehavior.Default, token);
-            return DataReaderToDataSet(reader);
+            return DbDataReaderToDataSet(reader);
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace CMS.DataEngine
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        private static DataSet DataReaderToDataSet(DbDataReader reader)
+        private static DataSet DbDataReaderToDataSet(DbDataReader reader)
         {
             if (reader == null)
             {
